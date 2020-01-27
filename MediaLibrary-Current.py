@@ -6,6 +6,8 @@
 
 class MediaLibrary(object):
     
+    games = {1 : ['FPS','Halo3','Bungee','Microsoft','xbox360','2007','10','either','30.00','Yes','1/25/2008'] }
+    
     def mainloop(self):
         # Found an interesting thing, functions are basically callable variables. They are stored much the same way as variables. This allows for you to store them
         #  in a dictionary like so and still be able to call them later. The way you call them is much the same except now they are stored under a differnt variable name or called directly.
