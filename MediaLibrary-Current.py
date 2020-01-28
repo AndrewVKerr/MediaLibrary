@@ -4,9 +4,21 @@
 
 '''A simple module for a media library that stores games.'''
 
+import pickle
+
 class MediaLibrary(object):
     
-    games = {1 : ['FPS','Halo3','Bungee','Microsoft','xbox360','2007','10','either','30.00','Yes','1/25/2008'] }
+    def __init__(self,filepath="game_lib.pickle"):
+        try:
+            self.filepath = filepath
+            datafile = open(filepath,"rb")
+            self.games = pickle.load(datafile)
+            datafile.close()
+        except Exception as e:
+            print("\t================================")
+            print("\t - Failed to open picklefile! - ")
+            print("\t================================")
+            raise e
     
     def mainloop(self):
         # Found an interesting thing, functions are basically callable variables. They are stored much the same way as variables. This allows for you to store them
@@ -53,7 +65,25 @@ class MediaLibrary(object):
         print("add_edit_games method called!")
         
     def print_all_games(self):
-        print("print_all_games method called!")
+        #print("print_all_games method called!")
+        for key in self.games:
+            game = self.games[key]
+            print("""
+========================================
+ - Title:\t\t"""+game[1]+"""
+ - Genre:\t\t"""+game[0]+"""
+ - Developer:\t\t"""+game[2]+"""
+ - Publisher:\t\t"""+game[3]+"""
+ - Console:\t\t"""+game[4]+"""
+ - Release Year:\t"""+game[5]+"""
+ - Rating:\t\t"""+game[6]+"""
+ - Multi/Single Player:\t"""+game[7]+"""
+ - Price:\t\t"""+game[8]+"""
+ - Have Played:\t\t"""+game[9]+"""
+ - Date Bought:\t\t"""+game[10]+"""
+ - Notes:\t\t"""+game[11]+"""
+
+""")
 
     def search_by_title(self):
         print("search_by_title method called!")
@@ -62,7 +92,16 @@ class MediaLibrary(object):
         print("remove_a_game method called!")
     
     def save_database(self):
-        print("save_database method called!")    
+        #print("save_database method called!")    
+        datafile = open(self.filepath,"wb")
+        pickle.dump(self.games,datafile)
+        datafile.close()
+        print("""
+========================================
+ - Saved database to file. 
+   ["""+self.filepath+"""]
+========================================
+""")
         
     def quit(self):
         print("quit method called!\nExiting now!")
