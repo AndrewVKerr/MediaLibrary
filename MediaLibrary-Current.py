@@ -87,8 +87,105 @@ class MediaLibrary(object):
         
     '''Adds a new game to the games dictionary, or edits a previously existing entry.'''
     def add_edit_games(self):
-        print("add_edit_games method called!")
+        #print("add_edit_games method called!")
         
+        #Enter a temporary menu while loop.
+        title = ""
+        valid = False
+        while not valid:
+            valid = True
+            
+            # Display a nice menu then ask for a title.
+            print()
+            print("========================================")
+            print("|       Add/Edit a Game entry.         |")
+            print("|          'r' to return.              |")
+            print("========================================")
+            title = input("- What is the title of the game: ")
+        
+            # Prevent the loop from ending if the title is blank.
+            if(title == ""):
+                valid = False
+                
+            # Bail from the function if the user wishes to return.
+            if(title.lower() == "r"):
+                return
+        
+        # Begin creating a new game entry, enter a temporary while loop.
+        new_entry = ["","","","","","","","","","","",""]
+        valid = False
+        while not valid:
+        
+            # Display a nice user prompt, retrieve required info for a game entry.
+            print("========================================")
+            print(" - Title:\t\t"+title)
+            new_entry[0] = input(" - Genre:\t\t")
+            new_entry[1] = title
+            new_entry[2] = input(" - Developer:\t\t")
+            new_entry[3] = input(" - Publisher:\t\t")
+            new_entry[4] = input(" - Console:\t\t")
+            new_entry[5] = input(" - Release Year:\t")
+            new_entry[6] = input(" - Rating:\t\t")
+            new_entry[7] = input(" - Multi/Single Player:\t")
+            new_entry[8] = input(" - Price:\t\t")
+            new_entry[9] = input(" - Have Played:\t\t")
+            new_entry[10] = input(" - Date Bought:\t\t")
+            new_entry[11] = input(" - Notes:\t\t")
+            print("========================================")
+            print("|  Please check the above information  |")
+            print("| to make sure it is correct. [Y/N]    |")
+            print("========================================")
+            
+            # Prompt user to make sure data is correct, exit loop if it is.
+            correct = input("Is Information Correct[Y/N]: ")
+            if correct.lower() in ("yes","y"):
+                valid = True
+        
+        # Use the helper function called find_game to find a game that matches the title.
+        entry_index = self.find_game(index=1,value_to_find=title)        
+        
+        # Check if the entry_index is None, if it is then assign it a new unique value. 
+        if entry_index == None:
+            entry_index = len(self.games)+1
+            
+        # (Re)Assign the entry at entry_index to new_entry.
+        self.games[entry_index] = new_entry
+        
+    '''
+    Searches through the games dictionary for the first game that has a value matching the value_to_find using the index.
+    
+    Parameters:
+     - index: (default 0), Index of the value were searching for.
+     - value_to_find: (default ""), The value to find.
+     
+    Returns:
+     - Either a key of the game that matched or a None type object.
+    '''
+    def find_game(self,index=0,value_to_find=""):
+        for key in self.games:
+            game = self.games[key]
+            if value_to_find.lower() == game[index].lower():
+                return key
+        return None
+    
+    '''
+    Searches through the games dictionary for any games that have a value matching the value_to_find using the index.
+    
+    Parameters:
+     - index: (default 0), Index of the value were searching for.
+     - value_to_find: (default ""), The value to find.
+     
+    Returns:
+     - A list containing the keys of any games that matched the search, can be of size 0.
+    '''    
+    def find_games(self,index=0,value_to_find=""):
+        result = []
+        for key in self.games:
+            game = self.games[key]
+            if value_to_find.lower() in game[index].lower():
+                result.append(key)
+        return result        
+      
     '''Prints all of the games found within the games dictionary.'''
     def print_all_games(self):
         #print("print_all_games method called!")
@@ -167,10 +264,8 @@ class MediaLibrary(object):
             print("========================================")
             search_value = input(" - "+term+" of desired game(s): ")
             print("========================================")
-            for key in self.games:
-                game = self.games[key]
-                if(search_value.lower() in game[index].lower()):
-                    self.print_game(game)
+            for key in self.find_games(index=index,value_to_find=search_value):
+                self.print_game(self.games[key])
         
     
     '''Removes a game from the games dictionary.'''
