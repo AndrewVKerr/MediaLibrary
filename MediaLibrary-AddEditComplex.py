@@ -84,38 +84,32 @@ class MediaLibrary(object):
             else:
                 print("==============\nInvalid selection please choose from the menu.")
         print("This should never happen, your computer broke out of an infinate loop?!")
-    
-    def add_game(self):
-        self.make_entry(len(self.games)+1)
-    
-    def edit_game(self):
         
-        finished = False
-        while not finished:
-            print()
-            print("========================================")
-            print("|     Available games for editing.     |")
-            print("|       Enter nothing to return.       |")
-            print("========================================")
-            for key in self.games:
-                print(" - "+self.games[key][1])
+    '''Adds a new game to the games dictionary, or edits a previously existing entry.'''
+    def add_edit_games(self):
+        #print("add_edit_games method called!")
         
-            print()
-            print("========================================")
-            title = input(" - Title of the game to edit: ")
-            if(title == ""):
-                return
+        #Enter a temporary menu while loop.
+        title = ""
+        valid = False
+        while not valid:
+            valid = True
             
-            # Use the helper function called find_game to find a game that matches the title.
-            entry_index = self.find_game(index=1,value_to_find=title)  
-            if(entry_index == None):
-                print("Invalid game title, please select from the list.")
-            else:
-                self.make_entry(entry_index)
-                finished = True
-                   
-    
-    def make_entry(self,entry_index):
+            # Display a nice menu then ask for a title.
+            print()
+            print("========================================")
+            print("|       Add/Edit a Game entry.         |")
+            print("|          'r' to return.              |")
+            print("========================================")
+            title = input("- What is the title of the game: ")
+        
+            # Prevent the loop from ending if the title is blank.
+            if(title == ""):
+                valid = False
+                
+            # Bail from the function if the user wishes to return.
+            if(title.lower() == "r"):
+                return
         
         # Begin creating a new game entry, enter a temporary while loop.
         new_entry = ["","","","","","","","","","","",""]
@@ -124,8 +118,9 @@ class MediaLibrary(object):
         
             # Display a nice user prompt, retrieve required info for a game entry.
             print("========================================")
-            new_entry[1] = input(" - Title:\t\t")
+            print(" - Title:\t\t"+title)
             new_entry[0] = input(" - Genre:\t\t")
+            new_entry[1] = title
             new_entry[2] = input(" - Developer:\t\t")
             new_entry[3] = input(" - Publisher:\t\t")
             new_entry[4] = input(" - Console:\t\t")
@@ -136,8 +131,6 @@ class MediaLibrary(object):
             new_entry[9] = input(" - Have Played:\t\t")
             new_entry[10] = input(" - Date Bought:\t\t")
             new_entry[11] = input(" - Notes:\t\t")
-            
-            print()
             print("========================================")
             print("|  Please check the above information  |")
             print("| to make sure it is correct. [Y/N]    |")
@@ -147,36 +140,17 @@ class MediaLibrary(object):
             correct = input("Is Information Correct[Y/N]: ")
             if correct.lower() in ("yes","y"):
                 valid = True
-                
-                
-        # (Re)Assign the entry at entry_index to new_entry.
-        self.games[entry_index] = new_entry     
-    
-    '''Adds a new game to the games dictionary, or edits a previously existing entry.'''
-    def add_edit_games(self):
-        #print("add_edit_games method called!")
         
-        finished = False
-        while not finished:
-            print("========================================")
-            print(" - 1) Add")
-            print(" - 2) Edit")
-            print(" - R) Return")
-            print()
+        # Use the helper function called find_game to find a game that matches the title.
+        entry_index = self.find_game(index=1,value_to_find=title)        
+        
+        # Check if the entry_index is None, if it is then assign it a new unique value. 
+        if entry_index == None:
+            entry_index = len(self.games)+1
             
-            choice = input("What would you like to do?: ")
-            choice = choice.lower()
-            
-            if choice == "1":
-                self.add_game()
-            elif choice == "2":
-                self.edit_game()
-            elif choice == "r":
-                finished = True
-            else:
-                print("Please select a valid choice!")
-                print()
-
+        # (Re)Assign the entry at entry_index to new_entry.
+        self.games[entry_index] = new_entry
+        
     '''
     Searches through the games dictionary for the first game that has a value matching the value_to_find using the index.
     
