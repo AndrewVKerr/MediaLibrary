@@ -85,9 +85,15 @@ class MediaLibrary(object):
                 print("==============\nInvalid selection please choose from the menu.")
         print("This should never happen, your computer broke out of an infinate loop?!")
     
+    '''Creates a new entry by prompting the user for information.'''
     def add_game(self):
+        #for possible_key in range(self.games):
+        #    if not possible_key in self.games:
+        #        self.make_entry(possible_key)
+        #        return
         self.make_entry(len(self.games)+1)
     
+    '''Prompts the user to edit a game.'''
     def edit_game(self):
         
         finished = False
@@ -114,7 +120,7 @@ class MediaLibrary(object):
                 self.make_entry(entry_index)
                 finished = True
                    
-    
+    '''Prompts the user for information to create a new entry.'''
     def make_entry(self,entry_index):
         
         # Begin creating a new game entry, enter a temporary while loop.
@@ -212,14 +218,27 @@ class MediaLibrary(object):
                 result.append(key)
         return result        
       
-    '''Prints all of the games found within the games dictionary.'''
+    '''
+    Prints all of the games found within the games dictionary.
+    
+    Returns:
+     - Nothing
+    '''
     def print_all_games(self):
         #print("print_all_games method called!")
         for key in self.games:
             game = self.games[key]
             self.print_game(game)
     
-    '''Prints a single game out to the console, requires a list of length 12 be passed.'''
+    '''
+    Prints a single game out to the console, requires a list of length 12 be passed.
+    
+    Parameters:
+     - game: A list containing all of the necessary information for a game entry.
+     
+    Returns:
+     - Nothing
+    '''
     def print_game(self,game):
         print("""
 ========================================
@@ -238,7 +257,9 @@ class MediaLibrary(object):
 
 """)        
 
-    '''Retrieves a search term from the user before attempting to search through the games dictionary for any possible matches.'''
+    '''
+    Retrieves a search term from the user before attempting to search through the games dictionary for any possible matches.
+    '''
     def search_for_game(self):
         #print("search_for_game method called!")
         
@@ -296,7 +317,42 @@ class MediaLibrary(object):
     
     '''Removes a game from the games dictionary.'''
     def remove_a_game(self):
-        print("remove_a_game method called!")
+        #print("remove_a_game method called!")
+        valid = False
+        while not valid:
+            print("""
+========================================
+|         Remove a Game Entry          |
+|       Enter nothing to return.       |
+========================================
+""")
+            for key in self.games:
+                print(" - "+str(key)+") "+self.games[key][1])
+            
+            print()
+            selected_key = input("What would you like to remove?: ")
+            
+            if selected_key == "":
+                return
+            
+            try:
+                selected_key = int(selected_key)
+            except:
+                print()
+                print("========================================")
+                print("|Invalid input, please supply a number.|")
+                print("========================================")
+                continue
+            
+            if not selected_key in self.games:
+                print()
+                print("========================================")
+                print("|Invalid input, selection isnt in range|")
+                print("========================================")
+                continue
+            
+            self.games.pop(selected_key)
+            valid = True
     
     '''Saves the games dictionary to the pickle file.'''
     def save_database(self):
@@ -313,7 +369,29 @@ class MediaLibrary(object):
         
     '''Exits the program'''
     def quit(self):
-        print("quit method called!\nExiting now!")
+        #print("quit method called!\nExiting now!")
+        print("""
+========================================
+| Would you like to quit the program?  |
+========================================""")
+        
+        user_wishes_quit = input("Quit? [Y/N]: ")
+        if not user_wishes_quit.lower() == "y":
+            return
+        
+        print("""
+========================================
+| Would you like to save any changes?  |
+========================================""")
+        
+        user_wishes_save = input("Save? [Y/N]: ")
+        if user_wishes_save.lower() == "y":
+            self.save_database()
+        
+        print("""
+========================================
+| Exiting program, Goodbye!            |
+========================================""")
         exit()
         
 if( __name__ == "__main__" ):
