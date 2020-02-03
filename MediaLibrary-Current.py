@@ -349,7 +349,7 @@ class MediaLibrary(object):
                 print("========================================")
                 print("|Invalid input, selection isnt in range|")
                 print("========================================")
-                continue
+                continue1
             
             while selected_key+1 in self.games:
                 self.games[selected_key] = self.games[selected_key+1]
