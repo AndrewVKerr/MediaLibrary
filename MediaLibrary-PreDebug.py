@@ -351,12 +351,7 @@ class MediaLibrary(object):
                 print("========================================")
                 continue
             
-            while selected_key+1 in self.games:
-                self.games[selected_key] = self.games[selected_key+1]
-                selected_key+=1
-                
             self.games.pop(selected_key)
-            
             valid = True
     
     '''Saves the games dictionary to the pickle file.'''
